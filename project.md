@@ -695,3 +695,10 @@ VeeValidate.Validator.extend('agree', {
 ## 打包构建 npm run build
 
 1.  productionSourceMap: false, // 取消打包 map 文件
+
+## nginx 反向代理
+
+1. Nginx (engine x) 是一个高性能的 HTTP 和反向代理 web 服务器
+
+3. 帮购买的服务器做事情，找其他服务器要数据
+
