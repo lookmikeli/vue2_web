@@ -702,3 +702,81 @@ VeeValidate.Validator.extend('agree', {
 
 3. 帮购买的服务器做事情，找其他服务器要数据
 
+## v-model 实现组件通信
+
+1. v-model 实现原理：value 和 input 事件实现的，而且还需要注意可以通过 v-model 实现子父组件数据同步
+
+- 子组件
+
+```vue
+<template>
+  <div>
+    <h2>input包装组件</h2>
+    <input type="text" :value="value" @input="$emit('input', $event.target.value)" />
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+export default {
+  name: 'CustomInput',
+  props:['value']
+}
+</script>
+```
+
+- 父组件
+
+```vue
+<template>
+  <div>
+    <h2>父组件{{ msg }}</h2>
+    <!-- 方式一 -->
+    <CustomInput :value="msg" @input="msg = $event"></CustomInput>
+    <!-- 方式二 -->
+    <CustomInput v-model="msg" />
+  </div>
+</template>
+```
+
+## $attrs 和 $listeners
+
+1. $attrs：组件实例的属性，可以获取到父亲传递的 props 数据（前提子组件没有通过 props 接受）
+2. $listeners：组件实例的属性，可以获取到父亲传递自定义事件（对象形式呈现）
+
+```vue
+<!-- 子组件 -->
+<template>
+  <div>
+    <!-- 不能简写 @ 和 ： -->
+    <el-button v-bind="$attrs" v-on="$listeners"></el-button>
+    <!-- 用户使用我们封装的组件，传递相应的参数 -->
+  </div>
+</template>
+
+<!-- 父组件 -->
+<template>
+  <div>
+    <h1>Element插件:提供的全局组件</h1>
+    <HintButton
+      type="success"
+      icon="el-icon-delete"
+      size="mini"
+      title="提示按钮"
+      @click="handler"
+    ></HintButton>
+  </div>
+</template>
+```
+
+## $refs 和 $children
+
+1. $refs:可以在父组件内部获取子组件 ---实现父子通信
+2. $children:可以在父组件内部获取全部的子组件【返回数组】
+3. $parent:可以在子组件内部获取唯一的父组件,可以操作父组件的数据和方法【返回组件实例】
+
+## 插槽 父子组件通信
+
+1. 子组件数据来源于父组件,子组件是决定不了自身结构与外观
+2. 作用域插槽： 在 slot 标签里面给使用插槽的使用组件，用类似 props 的参数形式，传递数据
+3. 作用域插槽： 使用者在插槽组件内使用 template 标签，书写结构
+
